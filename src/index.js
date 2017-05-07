@@ -17,14 +17,11 @@ export default class NobbbRenderSearch {
   }
 
   eachArticle(rawDocument, documentInfo, cb) {
-    console.log(documentInfo);
     try {
       fs.writeFile(
         path.join(documentInfo.outputDirPath, documentInfo.fileNameWithoutSuffix + '.json'),
         JSON.stringify(R.omit('category', documentInfo)),
-        () => {
-
-        }
+        R.identity
       )
     } catch(error) {
       throw error;
