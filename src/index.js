@@ -3,9 +3,11 @@ import path from 'path';
 import R from 'ramda';
 
 export default class NobbbRenderSearch {
-  constructor() {
+  constructor(configure) {
     this.name = 'ajax';
     this.type = 'render';
+
+    this.configure = configure;
   }
 
   getName() {
@@ -16,20 +18,30 @@ export default class NobbbRenderSearch {
     return this.type;
   }
 
-  eachArticle(rawDocument, documentInfo, cb) {
+  afterIndexRender(indexData) {
+
+  }
+
+  afterArticleRender(rawDocument, articleData, cb) {
     try {
       fs.writeFile(
-        path.join(documentInfo.outputDirPath, documentInfo.fileNameWithoutSuffix + '.json'),
-        JSON.stringify(R.omit('category', documentInfo)),
+        path.join(articleData.outputDirPath, articleData.fileNameWithoutSuffix + '.json'),
+        JSON.stringify(R.omit('category', articleData)),
         R.identity
       )
     } catch(error) {
       throw error;
     }
-
   }
 
-  after() {
+  afterIndexRender(indexData) {
+    fs.writeFile(
+      path.join(this.configure.outputRoot, 'index.json'),
+      JSON.stringify(indexData)
+    )
+  }
+
+  afterRender() {
   }
 
 
