@@ -21,15 +21,8 @@ export default class NobbbRenderAjax {
   beforeArticleRender(articleData) {}
 
   afterArticleRender(rawDocument, articleData) {
-    let outputPath;
-    let outputName;
-    if (articleData.hasAsset) {
-      outputPath = path.join(articleData.categoryOutputPath, articleData.articleFileNameWithoutSuffix);
-      outputName = 'index.json';
-    } else {
-      outputPath = articleData.categoryOutputPath;
-      outputName = articleData.articleFileNameWithoutSuffix + '.json';
-    }
+    let outputPath = path.join(articleData.categoryOutputPath, articleData.articleFileNameWithoutSuffix);
+    let outputName = 'index.json';
 
     fs.writeFileSync(
       path.join(
