@@ -18,23 +18,34 @@ export default class NobbbRenderAjax {
     return this.type;
   }
 
-  afterArticleRender(rawDocument, articleData, cb) {
-    try {
-      fs.writeFileSync(
-        path.join(
-          articleData.categoryOutputPath,
-          articleData.articleFileNameWithoutSuffix + '.json'
-        ),
-        JSON.stringify(articleData)
-      );
-    } catch (error) {
-      throw error;
+  beforeArticleRender(articleData) {}
+
+  afterArticleRender(rawDocument, articleData) {
+    let outputPath;
+    let outputName;
+    if (articleData.hasAsset) {
+      outputPath = path.join(articleData.categoryOutputPath, articleData.articleFileNameWithoutSuffix);
+      outputName = 'index.json';
+    } else {
+      outputPath = articleData.categoryOutputPath;
+      outputName = articleData.articleFileNameWithoutSuffix + '.json';
     }
+
+    fs.writeFileSync(
+      path.join(
+        outputPath,
+        outputName
+      ),
+      JSON.stringify(articleData)
+    );
   }
 
-  afterwCategoryListRender(data) {
+  afterwCategoryListRender(data, meta) {
+    if (!fs.existsSync(meta.outputPath)) {
+      fs.mkdirSync(meta.outputPath);
+    }
     fs.writeFileSync(
-      path.join(this.meta.outputRootPath, 'categorys.json'),
+      path.join(meta.outputPath, 'index.json'),
       JSON.stringify(data)
     );
   }
